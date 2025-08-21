@@ -2,14 +2,20 @@
 import os
 import re
 import pandas as pd
+import streamlit as st
 from dotenv import load_dotenv
 from sqlalchemy import create_engine, text
 
-# Load env vars from .env
-load_dotenv()
+# Load local .env only when secrets are not provided (i.e., running locally)
+if not st.secrets:
+    load_dotenv()
+
+def _get_secret(name: str, default: str | None = None) -> str | None:
+    # Prefer Streamlit Cloud secrets; fall back to local env
+    return st.secrets.get(name, os.getenv(name, default))
 
 # Prefer a full DATABASE_URL if provided; otherwise build from parts
-DATABASE_URL = os.getenv("POSTGRES_URL")
+DATABASE_URL = (_get_secret("DATABASE_URL") or _get_secret("POSTGRES_URL"))
 if not DATABASE_URL:
     DB_HOST = os.getenv("DB_HOST", "localhost")
     DB_PORT = os.getenv("DB_PORT", "5432")
