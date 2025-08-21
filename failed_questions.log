@@ -1,0 +1,238 @@
+Invalid JSON | Question: "List the datetime and close price for the last 10 records." | Raw: ```json
+{
+  "sql": "SELECT datetime, close FROM forex_bars ORDER BY datetime DESC LIMIT 10;",
+  "interpretation": "This query lists the most recent 10 records from the forex_bars table, showing their timestamps and closing prices.",
+  "learn_more": "https://www.postgresqltutorial.com/postgresql-select/"
+}
+```
+Invalid JSON | Question: "List the datetime and close price for the last 10 records." | Raw: ```json
+{
+  "sql": "SELECT datetime, close FROM forex_bars ORDER BY datetime DESC LIMIT 10;",
+  "interpretation": "This query lists the most recent 10 records from the forex_bars table, showing their timestamps and closing prices.",
+  "learn_more": "https://www.postgresqltutorial.com/postgresql-select/"
+}
+```
+Qwen failed after retry | Question: "List the datetime and close price for the last 10 records." | Error: Invalid JSON | Response: ```json
+{
+  "sql": "SELECT datetime, close FROM forex_bars ORDER BY datetime DESC LIMIT 10;",
+  "interpretation": "This query lists the most recent 10 records from the forex_bars table, showing their timestamps and closing prices.",
+  "learn_more": "https://www.postgresqltutorial.com/postgresql-select/"
+}
+```
+Invalid JSON | Question: "List the datetime and close price for the last 10 records." | Raw: ```json
+{
+  "sql": "SELECT datetime, close FROM forex_bars ORDER BY datetime DESC LIMIT 10;",
+  "interpretation": "This query lists the most recent 10 records from the forex_bars table, showing their timestamps and closing prices.",
+  "learn_more": "https://www.postgresql.org/docs/current/tutorial-indexes.html"
+}
+```
+Invalid JSON | Question: "List the datetime and close price for the last 10 records." | Raw: ```json
+{
+  "sql": "SELECT datetime, close FROM forex_bars ORDER BY datetime DESC LIMIT 10;",
+  "interpretation": "This query lists the most recent 10 records from the forex_bars table, showing their timestamps and closing prices.",
+  "learn_more": "https://www.postgresqltutorial.com/postgresql-select/"
+}
+```
+Qwen failed after retry | Question: "List the datetime and close price for the last 10 records." | Error: Invalid JSON | Response: ```json
+{
+  "sql": "SELECT datetime, close FROM forex_bars ORDER BY datetime DESC LIMIT 10;",
+  "interpretation": "This query lists the most recent 10 records from the forex_bars table, showing their timestamps and closing prices.",
+  "learn_more": "https://www.postgresqltutorial.com/postgresql-select/"
+}
+```
+Invalid JSON | Question: "show first and last date records" | Raw: ```json
+{
+  "sql": "SELECT MIN(datetime) AS earliest_date, MAX(datetime) AS latest_date FROM forex_bars;",
+  "interpretation": "This query shows the earliest and latest dates of forex bar data in the 'forex_bars' table.",
+  "learn_more": "https://www.postgresqltutorial.com/postgresql-select-min-max/"
+}
+```
+Invalid JSON | Question: "show first and last date records" | Raw: ```json
+{
+  "sql": "SELECT MIN(datetime) AS earliest_date, MAX(datetime) AS latest_date FROM forex_bars;",
+  "interpretation": "This query shows the earliest and latest dates of forex bar records.",
+  "learn_more": "https://www.postgresqltutorial.com/postgresql-select-min-max/"
+}
+```
+Qwen failed after retry | Question: "show first and last date records" | Error: Invalid JSON | Response: ```json
+{
+  "sql": "SELECT MIN(datetime) AS earliest_date, MAX(datetime) AS latest_date FROM forex_bars;",
+  "interpretation": "This query shows the earliest and latest dates of forex bar records.",
+  "learn_more": "https://www.postgresqltutorial.com/postgresql-select-min-max/"
+}
+```
+Invalid JSON | Question: "show first and last date records" | Raw: ```json
+{
+  "sql": "SELECT MIN(datetime) AS earliest_date, MAX(datetime) AS latest_date FROM forex_bars;",
+  "interpretation": "This query shows the earliest and latest dates of forex bar records in the database.",
+  "learn_more": "https://www.postgresqltutorial.com/postgresql-select-min-max/"
+}
+```
+Invalid JSON | Question: "show first and last date records" | Raw: ```json
+{
+  "sql": "SELECT min(datetime) as earliest_date, max(datetime) as latest_date FROM forex_bars;",
+  "interpretation": "This query shows the earliest and latest dates of forex bar records.",
+  "learn_more": "https://www.postgresqltutorial.com/postgresql-select-min-max/"
+}
+```
+Qwen failed after retry | Question: "show first and last date records" | Error: Invalid JSON | Response: ```json
+{
+  "sql": "SELECT min(datetime) as earliest_date, max(datetime) as latest_date FROM forex_bars;",
+  "interpretation": "This query shows the earliest and latest dates of forex bar records.",
+  "learn_more": "https://www.postgresqltutorial.com/postgresql-select-min-max/"
+}
+```
+Invalid JSON | Question: "show first and last date records" | Raw: ```json
+{
+  "sql": "SELECT MIN(datetime) AS earliest_date, MAX(datetime) AS latest_date FROM forex_bars;",
+  "interpretation": "This query shows the earliest and latest dates of forex bar records in the database.",
+  "learn_more": "https://www.postgresql.org/docs/current/functions-aggregate.html"
+}
+```
+Invalid JSON | Question: "show first and last date records" | Raw: ```json
+{
+  "sql": "SELECT MIN(datetime) AS earliest_date, MAX(datetime) AS latest_date FROM forex_bars;",
+  "interpretation": "This query shows the earliest and latest dates of forex bar records in the database.",
+  "learn_more": "https://www.postgresqltutorial.com/postgresql-select-min-max/"
+}
+```
+Qwen failed after retry | Question: "show first and last date records" | Error: Invalid JSON | Response: ```json
+{
+  "sql": "SELECT MIN(datetime) AS earliest_date, MAX(datetime) AS latest_date FROM forex_bars;",
+  "interpretation": "This query shows the earliest and latest dates of forex bar records in the database.",
+  "learn_more": "https://www.postgresqltutorial.com/postgresql-select-min-max/"
+}
+```
+Invalid JSON | Question: "Show earliest and latest timestamp" | Raw: ```json
+{
+  "sql": "SELECT MIN(datetime) AS earliest, MAX(datetime) AS latest FROM forex_bars;",
+  "interpretation": "This query shows the earliest and latest timestamps from the forex_bars table.",
+  "learn_more": "https://www.postgresqltutorial.com/postgresql-select-min-max/"
+}
+```
+Invalid JSON | Question: "Show earliest and latest timestamp" | Raw: ```json
+{
+  "sql": "SELECT min(datetime) AS earliest_timestamp, max(datetime) AS latest_timestamp FROM forex_bars;",
+  "interpretation": "This query shows the earliest and latest timestamps from the forex_bars table.",
+  "learn_more": "https://www.postgresqltutorial.com/postgresql-select-min-max/"
+}
+```
+Qwen failed after retry | Question: "Show earliest and latest timestamp" | Error: Invalid JSON | Response: ```json
+{
+  "sql": "SELECT min(datetime) AS earliest_timestamp, max(datetime) AS latest_timestamp FROM forex_bars;",
+  "interpretation": "This query shows the earliest and latest timestamps from the forex_bars table.",
+  "learn_more": "https://www.postgresqltutorial.com/postgresql-select-min-max/"
+}
+```
+Invalid JSON | Question: "Show earliest and latest timestamp" | Raw: ```json
+{
+  "sql": "SELECT MIN(datetime) AS earliest_timestamp, MAX(datetime) AS latest_timestamp FROM forex_bars;",
+  "interpretation": "This query shows the earliest (first) and latest (last) timestamps from the forex_bars table.",
+  "learn_more": "https://www.postgresqltutorial.com/postgresql-select-min-max/"
+}
+```
+Invalid JSON | Question: "Show earliest and latest timestamp" | Raw: ```json
+{
+  "sql": "SELECT MIN(datetime) AS earliest_timestamp, MAX(datetime) AS latest_timestamp FROM forex_bars;",
+  "interpretation": "This query shows the earliest and latest timestamps from the forex_bars table.",
+  "learn_more": "https://www.postgresqltutorial.com/postgresql-select-min-max/"
+}
+```
+Qwen failed after retry | Question: "Show earliest and latest timestamp" | Error: Invalid JSON | Response: ```json
+{
+  "sql": "SELECT MIN(datetime) AS earliest_timestamp, MAX(datetime) AS latest_timestamp FROM forex_bars;",
+  "interpretation": "This query shows the earliest and latest timestamps from the forex_bars table.",
+  "learn_more": "https://www.postgresqltutorial.com/postgresql-select-min-max/"
+}
+```
+Invalid JSON | Question: "Show earliest and latest timestamp" | Raw: ```json
+{
+  "sql": "SELECT MIN(datetime) AS earliest, MAX(datetime) AS latest FROM forex_bars;",
+  "interpretation": "This query shows the earliest and latest timestamps from the forex_bars table.",
+  "learn_more": "https://www.postgresqltutorial.com/postgresql-select-min-max/"
+}
+```
+Invalid JSON | Question: "Show earliest and latest timestamp" | Raw: ```json
+{
+  "sql": "SELECT MIN(datetime) AS earliest_timestamp, MAX(datetime) AS latest_timestamp FROM forex_bars;",
+  "interpretation": "This query shows the earliest and latest timestamps from the forex_bars table.",
+  "learn_more": "https://www.postgresqltutorial.com/postgresql-select-min-max/"
+}
+```
+Qwen failed after retry | Question: "Show earliest and latest timestamp" | Error: Invalid JSON | Response: ```json
+{
+  "sql": "SELECT MIN(datetime) AS earliest_timestamp, MAX(datetime) AS latest_timestamp FROM forex_bars;",
+  "interpretation": "This query shows the earliest and latest timestamps from the forex_bars table.",
+  "learn_more": "https://www.postgresqltutorial.com/postgresql-select-min-max/"
+}
+```
+Invalid JSON | Question: "What is the earliest and latest timestamp in the dataset?" | Raw: ```json
+{
+  "sql": "SELECT MIN(datetime) AS earliest, MAX(datetime) AS latest FROM forex_bars;",
+  "interpretation": "This query returns the earliest and latest timestamps from the forex_bars table.",
+  "learn_more": "https://www.postgresqltutorial.com/postgresql-select-min-max/"
+}
+```
+Invalid JSON | Question: "What is the earliest and latest timestamp in the dataset?" | Raw: ```json
+{
+  "sql": "SELECT MIN(datetime) AS earliest_timestamp, MAX(datetime) AS latest_timestamp FROM forex_bars;",
+  "interpretation": "This query returns the earliest and latest timestamps from the forex_bars table.",
+  "learn_more": "https://www.postgresqltutorial.com/postgresql-select-min-max/"
+}
+```
+Qwen failed after retry | Question: "What is the earliest and latest timestamp in the dataset?" | Error: Invalid JSON | Response: ```json
+{
+  "sql": "SELECT MIN(datetime) AS earliest_timestamp, MAX(datetime) AS latest_timestamp FROM forex_bars;",
+  "interpretation": "This query returns the earliest and latest timestamps from the forex_bars table.",
+  "learn_more": "https://www.postgresqltutorial.com/postgresql-select-min-max/"
+}
+```
+Invalid JSON | Question: "What is the earliest and latest timestamp in the dataset?" | Raw: ```json
+{
+  "sql": "SELECT MIN(datetime) AS earliest, MAX(datetime) AS latest FROM forex_bars;",
+  "interpretation": "This query returns the earliest and latest timestamps from the forex_bars table.",
+  "learn_more": "https://www.postgresqltutorial.com/postgresql-select-min-max/"
+}
+```
+Invalid JSON | Question: "What is the earliest and latest timestamp in the dataset?" | Raw: ```json
+{
+  "sql": "SELECT MIN(datetime) AS earliest_timestamp, MAX(datetime) AS latest_timestamp FROM forex_bars;",
+  "interpretation": "This query returns the earliest and latest timestamps from the forex_bars table.",
+  "learn_more": "https://www.postgresqltutorial.com/postgresql-select-min-max/"
+}
+```
+Qwen failed after retry | Question: "What is the earliest and latest timestamp in the dataset?" | Error: Invalid JSON | Response: ```json
+{
+  "sql": "SELECT MIN(datetime) AS earliest_timestamp, MAX(datetime) AS latest_timestamp FROM forex_bars;",
+  "interpretation": "This query returns the earliest and latest timestamps from the forex_bars table.",
+  "learn_more": "https://www.postgresqltutorial.com/postgresql-select-min-max/"
+}
+```
+Invalid JSON | Question: "What was the average pip change in the first 2 hours after the U.S. market open (13:00–15:00 UTC)?" | Raw: ```json
+{
+  "sql": "SELECT AVG(high - low) AS avg_pip_change FROM forex_bars WHERE datetime >= '2023-04-01T13:00:00Z' AND datetime < '2023-04-01T15:00:00Z';",
+  "interpretation": "This query calculates the average difference between the highest and lowest prices (pip change) for forex bars within the first two hours after the U.S. market opens.",
+  "learn_more": "https://www.investopedia.com/terms/p/point-in-point.asp"
+}
+```
+Invalid JSON | Question: "What was the average pip change in the first 2 hours after the U.S. market open (13:00–15:00 UTC)?" | Raw: ```json
+{
+  "sql": "SELECT AVG(high - low) AS avg_pip_change FROM forex_bars WHERE datetime >= '2023-04-01T13:00:00Z' AND datetime < '2023-04-01T15:00:00Z';",
+  "interpretation": "This query calculates the average difference between the highest and lowest prices (pip change) for forex bars within the first two hours after the U.S. market opens at 13:00 UTC.",
+  "learn_more": "https://www.investopedia.com/terms/p/priceaction.asp"
+}
+```
+Qwen failed after retry | Question: "What was the average pip change in the first 2 hours after the U.S. market open (13:00–15:00 UTC)?" | Error: Invalid JSON | Response: ```json
+{
+  "sql": "SELECT AVG(high - low) AS avg_pip_change FROM forex_bars WHERE datetime >= '2023-04-01T13:00:00Z' AND datetime < '2023-04-01T15:00:00Z';",
+  "interpretation": "This query calculates the average difference between the highest and lowest prices (pip change) for forex bars within the first two hours after the U.S. market opens at 13:00 UTC.",
+  "learn_more": "https://www.investopedia.com/terms/p/priceaction.asp"
+}
+```
+Qwen failed after retry | Question: "What is the earliest and latest timestamp in the dataset?" | Error: Invalid JSON | Response: ```json
+{
+  "sql": "SELECT MIN(datetime) AS earliest_timestamp, MAX(datetime) AS latest_timestamp FROM forex_bars;",
+  "interpretation": "This query returns the earliest and latest timestamps from the forex_bars table.",
+  "learn_more": "https://www.postgresqltutorial.com/postgresql-select-min-max/"
+}
+```

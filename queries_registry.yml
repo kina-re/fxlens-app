@@ -1,0 +1,257 @@
+- natural_language_question: "What is the average pip change and volatility (standard deviation) for each hour of the day?"
+  sql: |
+    SELECT
+      EXTRACT(HOUR FROM datetime)::int        AS hour,
+      ROUND(AVG(pip_oc)::numeric, 2)          AS avg_pip_change,
+      ROUND(STDDEV(pip_oc)::numeric, 2)       AS std_pip_change,
+      COUNT(*)                                AS data_points
+    FROM forex_bars
+    WHERE CAST(datetime AS date) BETWEEN %(start_date)s AND %(end_date)s
+    GROUP BY hour
+    ORDER BY hour;
+  interpretation: >
+    Reveals which UTC hours typically move more (avg pip change) and which are choppier (std dev).
+    Use it to time entries/exits, widen/tighten stops, and schedule pricing updates during
+    high-activity session overlaps.
+  learn_more: "https://www.babypips.com/learn/forex/forex-trading-sessions"
+
+- natural_language_question: "What is the average pip change and volatility (standard deviation) for each day of the week?"
+  sql: |
+    SELECT
+      CASE EXTRACT(DOW FROM datetime)::int
+        WHEN 0 THEN 'Sunday' WHEN 1 THEN 'Monday' WHEN 2 THEN 'Tuesday'
+        WHEN 3 THEN 'Wednesday' WHEN 4 THEN 'Thursday' WHEN 5 THEN 'Friday'
+        WHEN 6 THEN 'Saturday' END             AS day_name,
+      ROUND(AVG(pip_oc)::numeric, 2)          AS avg_pip_change,
+      ROUND(STDDEV(pip_oc)::numeric, 2)       AS std_pip_change,
+      COUNT(*)                                 AS data_points
+    FROM forex_bars
+    WHERE CAST(datetime AS date) BETWEEN %(start_date)s AND %(end_date)s
+    GROUP BY EXTRACT(DOW FROM datetime)
+    ORDER BY EXTRACT(DOW FROM datetime);
+  interpretation: >
+    Compares typical movement and volatility by weekday. Helps plan risk and resource allocation—
+    scale into days that historically offer more directional opportunity and reduce size on choppier days.
+  learn_more: "https://www.babypips.com/learn/forex/best-days-of-the-week-to-trade"
+
+- natural_language_question: "What is the 7 day pip_change moving_average?"
+  sql: |
+    WITH hourly AS (
+      SELECT date_trunc('hour', datetime) AS hour_ts,
+             AVG(pip_oc)                  AS pip_oc_hour
+      FROM forex_bars
+      WHERE CAST(datetime AS date) BETWEEN %(start_date)s AND %(end_date)s
+      GROUP BY 1
+    )
+    SELECT
+      hour_ts,
+      pip_oc_hour,
+      ROUND(
+        AVG(pip_oc_hour) OVER (
+          ORDER BY hour_ts
+          ROWS BETWEEN 167 PRECEDING AND CURRENT ROW
+        )::numeric, 4
+      ) AS moving_avg_7d
+    FROM hourly
+    ORDER BY hour_ts;
+  interpretation: >
+    Smooths hourly directional moves into a weekly (168h) baseline. Use it to judge whether current
+    momentum is building or fading compared to the recent week.
+  learn_more: "https://www.babypips.com/learn/forex/using-moving-averages"
+
+- natural_language_question: "On which days of the week does the pair show the most and least volatility, and how do average pip change and confidence vary by day?"
+  sql: |
+    SELECT
+      CASE EXTRACT(DOW FROM datetime)::int
+        WHEN 0 THEN 'Sunday' WHEN 1 THEN 'Monday' WHEN 2 THEN 'Tuesday'
+        WHEN 3 THEN 'Wednesday' WHEN 4 THEN 'Thursday' WHEN 5 THEN 'Friday'
+        WHEN 6 THEN 'Saturday' END             AS day_name,
+      ROUND(AVG(pip_oc)::numeric, 2)          AS avg_pip_change,
+      ROUND(STDDEV(pip_oc)::numeric, 2)       AS std_pip_change,
+      ROUND(AVG(confidence_score)::numeric, 3) AS confidence_score,
+      COUNT(*)                                 AS data_points
+    FROM forex_bars
+    WHERE CAST(datetime AS date) BETWEEN %(start_date)s AND %(end_date)s
+    GROUP BY EXTRACT(DOW FROM datetime)
+    ORDER BY EXTRACT(DOW FROM datetime);
+  interpretation: >
+    Blends direction (avg), choppiness (std dev), and your confidence score per weekday. Prioritize days
+    where movement and confidence align; tighten risk where they diverge.
+  learn_more: "https://www.investing.com/tools/forex-volatility-calculator"
+
+- natural_language_question: "Which hours of the week show the highest volatility in pip change?"
+  sql: |
+    SELECT
+      EXTRACT(DOW FROM datetime)::int  AS dayofweek,
+      EXTRACT(HOUR FROM datetime)::int AS hour,
+      ROUND(AVG(pip_oc)::numeric, 2)   AS avg_pip_change,
+      ROUND(STDDEV(pip_oc)::numeric, 2) AS std_pip_change,
+      COUNT(*)                          AS datapoints
+    FROM forex_bars
+    WHERE CAST(datetime AS date) BETWEEN %(start_date)s AND %(end_date)s
+    GROUP BY dayofweek, hour
+    ORDER BY std_pip_change DESC
+    LIMIT 10;
+  interpretation: >
+    Ranks the most explosive day/hour slots by dispersion. Great for breakout systems, alerting windows,
+    or deciding when to widen spreads and risk controls.
+  learn_more: "https://www.babypips.com/learn/forex/forex-trading-sessions"
+
+- natural_language_question: "During which 1-hour sessions did the pip change exceed a threshold (e.g., 50 pips)?"
+  sql: |
+    WITH hourly AS (
+      SELECT date_trunc('hour', datetime) AS hour_ts,
+             SUM(pip_oc)                  AS pip_oc_hour,
+             AVG(confidence_score)        AS confidence_score
+      FROM forex_bars
+      WHERE CAST(datetime AS date) BETWEEN %(start_date)s AND %(end_date)s
+      GROUP BY 1
+    )
+    SELECT
+      hour_ts AS datetime,
+      ROUND(pip_oc_hour::numeric, 2)      AS pip_change_pips,
+      ROUND(confidence_score::numeric, 3) AS confidence_score
+    FROM hourly
+    WHERE ABS(pip_oc_hour) > %(threshold_pips)s
+    ORDER BY ABS(pip_oc_hour) DESC, hour_ts DESC;
+  interpretation: >
+    Flags impulse hours with unusually strong net direction. Useful for event reviews and anamoly alerts.Great for aggressive strategies, but requires tighter risk measures 
+  learn_more: "https://www.fxcc.com/50-pips-a-day-forex-strategy"
+
+- natural_language_question: "Find opening gap-up hours followed by an intrahour reversal."
+  sql: |
+    WITH hourly AS (
+      SELECT date_trunc('hour', datetime) AS hour_ts,
+             FIRST_VALUE(open)  OVER (PARTITION BY date_trunc('hour', datetime) ORDER BY datetime ASC)  AS open_hour,
+             FIRST_VALUE(close) OVER (PARTITION BY date_trunc('hour', datetime) ORDER BY datetime DESC) AS close_hour
+      FROM forex_bars
+      WHERE CAST(datetime AS date) BETWEEN %(start_date)s AND %(end_date)s
+    ),
+    gap AS (
+      SELECT
+        hour_ts,
+        open_hour,
+        close_hour,
+        LAG(close_hour) OVER (ORDER BY hour_ts) AS prev_close_hour,
+        (open_hour - LAG(close_hour) OVER (ORDER BY hour_ts)) AS open_gap
+      FROM hourly
+    )
+    SELECT
+      hour_ts AS datetime,
+      ROUND((open_gap * 10000.0)::numeric, 2)                 AS open_gap_pips,
+      ROUND(((close_hour - open_hour) * 10000.0)::numeric, 2) AS pip_oc_hour
+    FROM gap
+    WHERE (open_gap * 10000.0) > %(min_gap_pips)s
+      AND close_hour < open_hour
+    ORDER BY datetime DESC;
+  interpretation: >
+    Detects “gap-up then fade” hours—strong open vs prior close, but intrahour reversal.
+    Avoids chasing fragile opens and supports fade-the-gap tactics.
+  learn_more: "https://www.babypips.com/forexpedia/gap"
+
+- natural_language_question: "What is the daily pip change based on the difference between the day's high and low rates?"
+  sql: |
+    WITH day_ranges AS (
+      SELECT
+        DATE(datetime)                         AS date,
+        ROUND(((MAX(high) - MIN(low)) * 10000)::numeric, 2)  AS pip_range_daily
+      FROM forex_bars
+      WHERE CAST(datetime AS date) BETWEEN %(start_date)s AND %(end_date)s
+      GROUP BY DATE(datetime)
+    )
+    SELECT *
+    FROM day_ranges
+    WHERE pip_range_daily > %(min_daily_pips)s
+    ORDER BY date;
+  interpretation: >
+    Measures true daily range (Hi–Lo) in pips. Use to track volatility regimes, news-driven days,
+    and decide when daily price updates or wider stops are justified.
+  learn_more: "https://www.captrader.com/en/blog/pip-trading/"
+
+- natural_language_question: "What is the daily pip change based on the first open and last close price for each trading day?"
+  sql: |
+    WITH prices AS (
+      SELECT
+        DATE(datetime) AS trade_date,
+        FIRST_VALUE(open)  OVER (PARTITION BY DATE(datetime) ORDER BY datetime ASC)  AS open_price,
+        FIRST_VALUE(close) OVER (PARTITION BY DATE(datetime) ORDER BY datetime DESC) AS close_price
+      FROM forex_bars
+      WHERE CAST(datetime AS date) BETWEEN %(start_date)s AND %(end_date)s
+    )
+    SELECT DISTINCT
+      trade_date,
+      ROUND(((close_price - open_price) * 10000.0)::numeric, 2) AS pip_change_open_close
+    FROM prices
+    ORDER BY trade_date;
+  interpretation: >
+    Captures daily net direction (Close−Open) in pips—good for spotting bullish/bearish streaks and
+    aligning pricing bias or hedge posture with prevailing trend.
+  learn_more: "https://trendspider.com/learning-center/official-daily-open-and-daily-close-prices/"
+
+- natural_language_question: "During which hourly sessions does the pair experience high volatility, defined as pip movement exceeding a threshold (e.g., 50 pips)?"
+  sql: |
+    WITH hourly AS (
+      SELECT
+        date_trunc('hour', datetime) AS hour_ts,
+        MAX(high) - MIN(low)         AS hl_range
+      FROM forex_bars
+      WHERE CAST(datetime AS date) BETWEEN %(start_date)s AND %(end_date)s
+      GROUP BY 1
+    )
+    SELECT
+      hour_ts AS datetime,
+      ROUND((hl_range * 10000.0)::numeric, 2) AS pip_range_pips
+    FROM hourly
+    WHERE (hl_range * 10000.0) > %(threshold_pips)s
+    ORDER BY datetime;
+  interpretation: >
+    Finds very wide hours by true range (Hi–Lo). Handy for detecting shocks and adjusting
+    stops/spreads or throttling algos during turbulence.
+  learn_more: "https://priceactionninja.com/forex-pair-volatility-cheatsheet-updated-2025/"
+
+- natural_language_question: "During which hourly sessions does the pair exhibit strong directional movement, with pip change (Close − Open) exceeding a threshold?"
+  sql: |
+    WITH hourly AS (
+      SELECT
+        date_trunc('hour', datetime) AS hour_ts,
+        SUM(pip_oc)                  AS pip_oc_hour
+      FROM forex_bars
+      WHERE CAST(datetime AS date) BETWEEN %(start_date)s AND %(end_date)s
+      GROUP BY 1
+    )
+    SELECT
+      hour_ts AS datetime,
+      ROUND(pip_oc_hour::numeric, 2) AS pip_move_pips
+    FROM hourly
+    WHERE ABS(pip_oc_hour) > %(threshold_pips)s
+    ORDER BY datetime;
+  interpretation: >
+    Highlights trend-strong hours where net direction dominates. Useful for breakout follow-through checks
+    and momentum-based scaling rules.
+  learn_more: "https://forexop.com/strategy/directional-volume-breakouts/"
+
+- natural_language_question: "When does the high–low range within an hour exceed the historical average range?"
+  sql: |
+    WITH hourly AS (
+      SELECT
+        date_trunc('hour', datetime) AS hour_ts,
+        MAX(high) - MIN(low)         AS hl_range
+      FROM forex_bars
+      WHERE CAST(datetime AS date) BETWEEN %(start_date)s AND %(end_date)s
+      GROUP BY 1
+    ),
+    stats AS (
+      SELECT AVG(hl_range) AS avg_range FROM hourly
+    )
+    SELECT
+      h.hour_ts AS datetime,
+      ROUND((h.hl_range * 10000.0)::numeric, 2) AS pip_range_pips,
+      ROUND((s.avg_range * 10000.0)::numeric, 2) AS avg_range_pips
+    FROM hourly h
+    CROSS JOIN stats s
+    WHERE h.hl_range > s.avg_range
+    ORDER BY datetime;
+  interpretation: >
+    Compares each hour’s true range against its historical average—simple “volatility spike” detector for
+    real-time alerts and risk throttling.
+  learn_more: "https://tradethatswing.com/analyzing-eur-usd-volatility-for-day-trading-purposes/"

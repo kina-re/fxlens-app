@@ -1,0 +1,7 @@
+### Test Forex Query API
+POST http://127.0.0.1:8001/ask
+Content-Type: application/json
+
+{
+  "question": "What is the average pip change and volatility (standard deviation) for each hour of the day?"
+}

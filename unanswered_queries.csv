@@ -1,0 +1,23 @@
+timestamp,question,failed_sql
+2025-08-18T12:34:18.575223,"""What is the earliest and latest timestamp in the dataset?""",
+2025-08-18T12:35:14.275885,"""What was the average pip change in the first 2 hours after the U.S. market open (13:00–15:00 UTC)?""",
+2025-08-18T12:40:47.553223,"""What is the earliest and latest timestamp in the dataset?""",
+2025-08-21T00:36:40.685822,"""What is the total trading volume for EUR/USD last week?""","SELECT SUM(volume) AS total_volume
+FROM forex_bars
+WHERE symbol = 'EUR/USD'
+  AND CAST(datetime AS date) BETWEEN :start_date - INTERVAL '7 days' AND :end_date;"
+2025-08-21T00:46:53.464607,"""What is the total trading volume for EUR/USD last week?""","SELECT SUM(volume) AS total_volume
+FROM forex_bars
+WHERE symbol = 'EUR/USD' AND CAST(datetime AS date) BETWEEN :start_date - INTERVAL '7 day' AND :end_date;"
+2025-08-21T00:47:04.652324,"""What is the total trading volume for EUR/USD last week?""","SELECT SUM(volume) AS total_volume
+FROM forex_bars
+WHERE symbol = 'EUR/USD'
+  AND CAST(datetime AS date) BETWEEN :start_date - INTERVAL '7 days' AND :end_date;"
+2025-08-21T00:48:08.801664,What is the total trading volume for EUR/USD last week?,"SELECT SUM(volume) AS total_volume
+FROM forex_bars
+WHERE symbol = 'EUR/USD'
+  AND CAST(datetime AS date) BETWEEN :start_date - INTERVAL '7 days' AND :end_date;"
+2025-08-21T00:53:16.345603,What is the total trading volume for EUR/USD last week?,"SELECT SUM(volume) AS total_volume
+FROM forex_bars
+WHERE symbol = 'EUR/USD'
+  AND CAST(datetime AS date) BETWEEN :start_date - INTERVAL '7 days' AND :end_date;"
