@@ -42,6 +42,9 @@ MIT License – feel free to use and adapt.
 Demo video coming soon.
 The app will also be available on Streamlit Cloud once deployed.
 
+This application uses the Qwen2.5-7B-Instruct model, licensed under the Apache License 2.0.
+Copyright © Alibaba Cloud.
+
 
 
 
